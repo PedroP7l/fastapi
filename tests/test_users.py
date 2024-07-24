@@ -39,7 +39,7 @@ def test_create_user_same_email(client, user: User):
 
 def test_get_by_user_id(client, user: User):
     user_schema = UserPublic.model_validate(user).model_dump()
-    response = client.get('/users/1')
+    response = client.get(f'/users/{user.id}')
     assert response.status_code == HTTPStatus.OK
     assert response.json() == user_schema
 
@@ -62,13 +62,14 @@ def test_read_user(client):
     assert response.json() == {'users': []}
 
 
-def test_read_user_with_user(client, user: User):
+def test_read_user_with_user(client, user: User, other_user):
     user_schema = UserPublic.model_validate(user).model_dump()
+    other_user_schema = UserPublic.model_validate(other_user).model_dump()
     response = client.get('/users/')
 
     assert response.status_code == HTTPStatus.OK
 
-    assert response.json() == {'users': [user_schema]}
+    assert response.json() == {'users': [user_schema, other_user_schema]}
 
 
 def test_update_user(client, user: User, token):
@@ -76,7 +77,6 @@ def test_update_user(client, user: User, token):
         f'/users/{user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
-            'id': 1,
             'username': 'test_update_user',
             'email': 'user@example.com',
             'password': 'string',
@@ -91,12 +91,11 @@ def test_update_user(client, user: User, token):
     }
 
 
-def test_update_user_not_found(client, user: User, token):
+def test_update_wrong_user(client, other_user: User, token):
     response = client.put(
-        '/users/3',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
-            'id': 3,
             'username': 'test_update_user',
             'email': 'user@example.com',
             'password': 'string',
@@ -115,9 +114,9 @@ def test_delete_user(client, user: User, token):
     assert response.json() == {'message': 'User deleted!'}
 
 
-def test_delete_wrong_user(client, user: User, token):
+def test_delete_wrong_user(client, other_user: User, token):
     response = client.delete(
-        f'/users/{user.id + 1}',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
