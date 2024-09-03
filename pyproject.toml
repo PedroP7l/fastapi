@@ -46,8 +46,11 @@ lint = 'ruff check . ; ruff check . --diff'
 format = 'ruff check . --fix ; ruff format .'
 run = 'fastapi dev fast_api/app.py'
 pre_test = 'task lint'
-test = 'pytest --cov=fast_api -vv'
+test = 'pytest --cov=fast_api -vv -s'
 post_test = 'coverage html'
+compose = 'docker compose up -d'
+# build = 'docker build -t fast_api .'
+# run_build = 'docker run -it --name fast_api_app -p 8000:8000 fast_api:latest'
 
 [build-system]
 requires = ["poetry-core"]
