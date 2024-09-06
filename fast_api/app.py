@@ -1,4 +1,4 @@
-# https://www.youtube.com/watch?v=bpBbbUgmdMs&list=PLOQgLBuj2-3IuFbt-wJw2p2NiV9WTRzIP&index=13
+# https://www.youtube.com/watch?v=xb_jtnYiPUQ&list=PLOQgLBuj2-3IuFbt-wJw2p2NiV9WTRzIP&index=13
 # olhar o parametrize para os testes
 # corrigir a rota get do TODOS
 from http import HTTPStatus
